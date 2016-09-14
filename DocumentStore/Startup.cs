@@ -16,6 +16,8 @@ namespace MinimalOwinWebApiSelfHost
         {
             var webApiConfiguration = ConfigureWebApi();
 
+            app.UseCors(new Microsoft.Owin.Cors.CorsOptions());
+
             // Use the extension method provided by the WebApi.Owin library:
             app.UseWebApi(webApiConfiguration);
 
@@ -33,6 +35,7 @@ namespace MinimalOwinWebApiSelfHost
         private HttpConfiguration ConfigureWebApi()
         {
             var config = new HttpConfiguration();
+            //config.EnableCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
                 "DefaultApi",

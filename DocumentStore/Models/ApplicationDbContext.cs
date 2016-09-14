@@ -17,6 +17,7 @@ namespace MinimalOwinWebApiSelfHost.Models
         }
 
         public IDbSet<Company> Companies { get; set; }
+        public IDbSet<Document> Documents { get; set; }
     }
 
 
@@ -28,6 +29,8 @@ namespace MinimalOwinWebApiSelfHost.Models
             context.Companies.Add(new Company { Name = "Microsoft" });
             context.Companies.Add(new Company { Name = "Google" });
             context.Companies.Add(new Company { Name = "Apple" });
+
+            context.Documents.Add(new Document() { Name = "Testdokument.docx", CreateDate = DateTime.Now, DocumentID = 1, FilePath = "", Tags = new List<string> { "test", "dok" } });
         }
     }
 }

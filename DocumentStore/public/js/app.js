@@ -52,7 +52,7 @@ app.run( function($rootScope, $location) {
 app.service('loginService', function ($http) {
   this.register = function (userInfo) {
     var resp = $http({
-      url: "http://localhost:8082/api/Account/Register",
+      url: "http://localhost:12345/api/Account/Register",
       method: "POST",
       data: userInfo,
     });
@@ -62,7 +62,7 @@ app.service('loginService', function ($http) {
   this.login = function (userlogin) {
 
     var resp = $http({
-      url: "http://localhost:8082/TOKEN",
+      url: "http://localhost:12345/TOKEN",
       method: "POST",
       data: $.param({ grant_type: 'password', username: userlogin.username, password: userlogin.password }),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -75,7 +75,7 @@ app.service('loginService', function ($http) {
 app.service('documentService', function ($http) {
   this.getDocuments = function (q) {
     var resp = $http({
-      url: "http://localhost:8082/api/documents",
+      url: "http://localhost:12345/api/documents",
       method: "GET",
       isArray: true,
       params: {"n": 9, "q": q},
@@ -118,8 +118,8 @@ function ($scope, $http, documentService, Upload, notify) {
   // upload on file select or drop
   $scope.upload = function (file) {
     Upload.upload({
-      // url: 'http://localhost:8082/api/files/uploadfile',
-      url: 'http://localhost:8082/api/documents',
+      // url: 'http://localhost:12345/api/files/uploadfile',
+      url: 'http://localhost:12345/api/documents',
       data: {'name': $scope.filename, 'tags': $scope.tags, file: file},
       headers: {
         'Authorization': 'Bearer ' + sessionStorage.getItem('accessToken'),
@@ -146,9 +146,9 @@ function ($scope, $http, documentService, Upload, notify) {
   }
 
   $scope.downloadFile = function(id) {
-    window.open("http://localhost:8082/api/documents/" + id, '_main', '');
+    window.open("http://localhost:12345/api/documents/" + id, '_main', '');
 
-    /*return Restangular.one("http://localhost:8082/api/files", id).withHttpConfig({responseType: 'arraybuffer'}).get().then(function(data){
+    /*return Restangular.one("http://localhost:12345/api/files", id).withHttpConfig({responseType: 'arraybuffer'}).get().then(function(data){
     console.log(data)
     var blob = new Blob([data], {
     type: "application/force-download"

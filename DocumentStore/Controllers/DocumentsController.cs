@@ -6,83 +6,41 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Net.Http;
 using MinimalOwinWebApiSelfHost.Models;
-
-// Add these usings:
 using System.Data.Entity;
+using System.Net;
 
 namespace MinimalOwinWebApiSelfHost.Controllers
 {
     public class DocumentsController : ApiController
     {
         ApplicationDbContext _Db = new ApplicationDbContext();
-
-
-        public IEnumerable<Company> Get()
+        
+        public IEnumerable<Document> Get()
         {
-            return _Db.Companies;
+            return _Db.Documents.ToList();
         }
 
-
-        public async Task<Company> Get(int id)
+        public HttpResponseMessage Post([FromBody]PostDocumentModel model)
         {
-            var company = await _Db.Companies.FirstOrDefaultAsync(c => c.Id == id);
-            if (company == null)
-            {
-                throw new HttpResponseException(
-                    System.Net.HttpStatusCode.NotFound);
-            }
-            return company;
+            //if (!Request.Content.IsMimeMultipartContent())
+            //    throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
+            //var provider = new MultipartMemoryStreamProvider();
+            //await Request.Content.ReadAsMultipartAsync(provider);
+            //foreach (var file in provider.Contents)
+            //{
+            //    var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+            //    var buffer = await file.ReadAsByteArrayAsync();
+            //    //Do whatever you want with filename and its binaray data.
+            //}
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
+    }
 
-
-        public async Task<IHttpActionResult> Post(Company company)
-        {
-            if (company == null)
-            {
-                return BadRequest("Argument Null");
-            }
-            var companyExists = await _Db.Companies.AnyAsync(c => c.Id == company.Id);
-
-            if (companyExists)
-            {
-                return BadRequest("Exists");
-            }
-
-            _Db.Companies.Add(company);
-            await _Db.SaveChangesAsync();
-            return Ok();
-        }
-
-
-        public async Task<IHttpActionResult> Put(Company company)
-        {
-            if (company == null)
-            {
-                return BadRequest("Argument Null");
-            }
-            var existing = await _Db.Companies.FirstOrDefaultAsync(c => c.Id == company.Id);
-
-            if (existing == null)
-            {
-                return NotFound();
-            }
-
-            existing.Name = company.Name;
-            await _Db.SaveChangesAsync();
-            return Ok();
-        }
-
-
-        public async Task<IHttpActionResult> Delete(int id)
-        {
-            var company = await _Db.Companies.FirstOrDefaultAsync(c => c.Id == id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-            _Db.Companies.Remove(company);
-            await _Db.SaveChangesAsync();
-            return Ok();
-        }
+    public class PostDocumentModel
+    {
+        public string Name { get; set; }
+        public string Tags { get; set; }
     }
 }
